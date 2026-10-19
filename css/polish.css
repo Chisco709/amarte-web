@@ -13,3 +13,8 @@ body{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/20
 @keyframes pop{from{scale:.1;opacity:0;rotate:60deg}}
 input[type=number]{max-width:110px}
 .hx.f:focus-visible{outline:none}
+
+.hx.f.sel{background:#f0b232;scale:1.35;z-index:2}.hx.f.sel::after{background:#f0b232}
+#sb{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));translate:-50% 0;z-index:75;display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:center;background:var(--g2);color:#fff;border:3px solid #fff;padding:12px 18px;box-shadow:6px 6px 0 #f0b232;max-width:94vw;font-weight:800}
+#sb[hidden]{display:none}
+#sb .btn{padding:8px 16px;font-size:15px;box-shadow:3px 3px 0 #fff}

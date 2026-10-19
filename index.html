@@ -52,8 +52,8 @@
 
 <section id="cielo" class="sky"><div class="wrap">
 <h2>Cielo Tejido</h2>
-<p style="margin-top:22px;font-size:21px">880 hexágonos de crochet, tejidos por el barrio, cubrirán el cielo de la calle y atraerán visitantes a la casa y al café. Cada uno vale $8.000. Toca un hexágono vacío y apadrínalo.</p>
-<ol class="how"><li><b>Elige</b> un hexágono vacío del cielo.</li><li><b>Apadrínalo</b> con $8.000.</li><li><b>Lo teje</b> una persona del barrio.</li></ol>
+<p style="margin-top:22px;font-size:21px">880 hexágonos de crochet, tejidos por el barrio, cubrirán el cielo de la calle y atraerán visitantes a la casa y al café. Cada uno vale $8.000. Toca los hexágonos vacíos que quieras apadrinar y envíanos tu solicitud por WhatsApp.</p>
+<ol class="how"><li><b>Elige</b> un hexágono vacío del cielo.</li><li><b>Escríbenos</b> por WhatsApp y confirma tu aporte.</li><li><b>Lo teje</b> una persona del barrio.</li></ol>
 <div class="stats">
 <div><b id="nT">0</b>tejidos</div><div><b id="nP">0</b>apadrinados</div><div><b id="nF">0</b>por apadrinar</div><div><b id="nM">$0</b>por reunir</div>
 </div>
@@ -101,14 +101,15 @@
 </div></footer>
 
 <dialog id="dlg">
-<div>Apadrina este hexágono</div>
-<h3>Hexágono <span id="dN"></span></h3>
-<p>Tu aporte: <b id="dT">$8.000</b>. Cada hexágono paga la lana y el hilo de una pieza que tejerá una persona del barrio y colgará sobre la calle.</p>
-<label for="qty">¿Cuántos hexágonos? (máx. 20)</label><input id="qty" type="number" min="1" max="20" value="1">
+<div>Apadrina el Cielo Tejido</div>
+<h3>Tu apadrinamiento</h3>
+<p style="word-break:break-word">Hexágonos: <b id="dL"></b><br>Total: <b id="dT"></b></p>
+<p>Al continuar se abre WhatsApp con tu solicitud lista para enviar a la fundación. Tu hexágono se marca como apadrinado cuando confirmemos tu aporte.</p>
 <label for="nm">Tu nombre</label><input id="nm" autocomplete="name" placeholder="Nombre y apellido">
-<label for="ct">WhatsApp o correo</label><input id="ct" placeholder="Para coordinar tu aporte">
-<div class="acts"><button class="btn y" id="ok">Apadrinar</button><button class="btn" id="no">Cancelar</button></div>
+<label for="ct">Tu WhatsApp o correo</label><input id="ct" placeholder="Para coordinar tu aporte">
+<div class="acts"><button class="btn y" id="ok">Enviar por WhatsApp</button><button class="btn" id="no">Cancelar</button></div>
 </dialog>
+<div id="sb" hidden><div><b id="sbN"></b> · <span id="sbT"></span></div><button class="btn y" id="sbGo">Apadrinar</button><button class="btn" id="sbClr">Limpiar</button></div>
 <div id="tip"></div><div id="toast" role="status"></div>
 
 <script src="js/data.js"></script>
