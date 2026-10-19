@@ -63,8 +63,11 @@
 <button class="chip" data-f="t" aria-pressed="false"><span class="dot"></span>Tejidos</button>
 <button class="chip" data-f="p" aria-pressed="false"><span class="dot w"></span>Apadrinados</button>
 <button class="chip" data-f="f" aria-pressed="false"><span class="dot o"></span>Faltan</button>
+<button class="chip" data-f="r" aria-pressed="false"><span class="dot r"></span>En proceso</button>
 </div>
 <div id="grid"></div>
+<h3 style="font-size:clamp(34px,5vw,56px);margin:56px 0 16px;transform:skewX(-8deg);transform-origin:left">Padrinos del cielo</h3>
+<div id="muro" class="muro"></div>
 </div></section>
 
 <section id="plan"><div class="wrap">
@@ -104,9 +107,10 @@
 <div>Apadrina el Cielo Tejido</div>
 <h3>Tu apadrinamiento</h3>
 <p style="word-break:break-word">Hexágonos: <b id="dL"></b><br>Total: <b id="dT"></b></p>
-<p>Al continuar se abre WhatsApp con tu solicitud lista para enviar a la fundación. Tu hexágono se marca como apadrinado cuando confirmemos tu aporte.</p>
+<p>Se abre WhatsApp con tu solicitud. La fundación te enviará los datos de pago, y el hexágono se marca como apadrinado cuando confirme tu comprobante. Si no pagas, queda libre.</p>
 <label for="nm">Tu nombre</label><input id="nm" autocomplete="name" placeholder="Nombre y apellido">
 <label for="ct">Tu WhatsApp o correo</label><input id="ct" placeholder="Para coordinar tu aporte">
+<label style="display:flex;gap:10px;align-items:center;font-weight:600"><input id="mostrar" type="checkbox" checked style="width:22px;height:22px"> Mi nombre puede aparecer en el cielo</label>
 <div class="acts"><button class="btn y" id="ok">Enviar por WhatsApp</button><button class="btn" id="no">Cancelar</button></div>
 </dialog>
 <div id="sb" hidden><div><b id="sbN"></b> · <span id="sbT"></span></div><button class="btn y" id="sbGo">Apadrinar</button><button class="btn" id="sbClr">Limpiar</button></div>
