@@ -21,7 +21,7 @@ function muro() {
   });
 }
 function draw() {
-  var W = g.clientWidth, s = W < 600 ? 28 : 40, cols = Math.floor((W - s / 2) / s), rows = Math.ceil(TOTAL / cols), h = s * 1.1547, dy = s * .866;
+  var W = g.clientWidth, s = W < 600 ? 30 : 50, cols = Math.floor((W - s / 2) / s), rows = Math.ceil(TOTAL / cols), h = s * 1.1547, dy = s * .866;
   g.style.height = (rows * dy + h - dy) + 'px'; g.innerHTML = '';
   var fr = document.createDocumentFragment();
   st.forEach(function (v, i) {
@@ -29,7 +29,12 @@ function draw() {
     b.className = 'hx ' + C[v] + (sel[i] ? ' sel' : ''); b.dataset.i = i;
     b.style.cssText = 'width:' + (s - 2) + 'px;height:' + (h - 2) + 'px;left:' + (c * s + (r % 2 ? s / 2 : 0) + 1) + 'px;top:' + (r * dy + 1) + 'px' + (v == 1 ? ';background:' + col[i] : '');
     if (v) b.style.setProperty('--d', (Math.random() * 1.8).toFixed(2) + 's'); else b.setAttribute('aria-pressed', !!sel[i]);
-    if (who[i]) { var sp = document.createElement('span'); sp.textContent = who[i].trim().charAt(0).toUpperCase(); b.appendChild(sp); }
+    if (who[i]) {
+      var sp = document.createElement('span'), fw = who[i].trim().split(/\s+/)[0], big = s >= 40;
+      sp.textContent = big ? (fw.length > 9 ? fw.slice(0, 8) + '.' : fw) : fw.charAt(0).toUpperCase();
+      if (big) sp.style.fontSize = Math.max(8, Math.min(14, s * .86 / (Math.min(fw.length, 9) * .56))).toFixed(1) + 'px';
+      b.appendChild(sp);
+    }
     b.setAttribute('aria-label', 'Hexágono ' + (i + 1) + ': ' + LBL[v] + (who[i] ? ', padrino ' + who[i] : '')); if (!v === false && !who[i]) b.tabIndex = -1;
     fr.appendChild(b);
   });
