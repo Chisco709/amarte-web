@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex">
+<title>Panel · Amarte</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Bricolage+Grotesque:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f6f4ee;color:#0a2e0e;font:17px/1.5 'Bricolage Grotesque',system-ui,sans-serif}
+header{background:#0a2e0e;color:#fff;padding:14px 20px;display:flex;gap:14px;align-items:center;border-bottom:3px solid #fff;position:sticky;top:0}
+header .d{font:400 26px Anton,sans-serif;text-transform:uppercase;margin-right:auto}
+main{max-width:760px;margin:0 auto;padding:24px 18px 80px}
+h2{font:400 34px/1 Anton,sans-serif;text-transform:uppercase;margin:36px 0 14px}
+input{font:inherit;padding:10px 12px;border:3px solid #0a2e0e;border-radius:0;background:#fff;width:100%;margin:4px 0 12px}
+button{font:800 16px 'Bricolage Grotesque',sans-serif;background:#fff;color:#0a2e0e;border:3px solid #0a2e0e;padding:10px 16px;cursor:pointer;box-shadow:4px 4px 0 #0a2e0e}
+button.ok{background:#f0b232}button.no{background:#fff}button.on{background:#14501a;color:#fff}
+.tabs,.row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}.row>*{flex:1 1 140px}
+.card{background:#fff;border:3px solid #0a2e0e;padding:16px;margin-bottom:16px;box-shadow:6px 6px 0 #14501a}
+.card b.n{font:400 28px Anton,sans-serif;text-transform:uppercase}.card .m{color:#46604b;font-size:15px}
+.card .a{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+a{color:#14501a;font-weight:800}
+#msg{position:fixed;left:50%;bottom:20px;translate:-50% 0;background:#f0b232;border:3px solid #0a2e0e;padding:10px 20px;font-weight:800;display:none;max-width:92vw}
+</style></head><body>
+<header><span class="d">Panel Amarte</span><button id="bell" hidden>Activar avisos</button><button id="out" hidden>Salir</button></header>
+<main>
+<section id="login"><h2>Entrar</h2><label>Correo<input id="em" type="email" autocomplete="username"></label><label>Contraseña<input id="pw" type="password" autocomplete="current-password"></label><button class="ok" id="in">Entrar</button><p id="err"></p></section>
+<section id="app" hidden>
+<h2>Solicitudes <span id="cnt"></span></h2>
+<div class="tabs" id="tabs"></div><div id="list"></div>
+<h2>Hexágonos tejidos</h2>
+<div class="row"><label>Desde<input id="td" type="number" min="1" max="880"></label><label>Hasta<input id="th" type="number" min="1" max="880"></label></div>
+<div class="tabs"><button class="ok" id="tj">Marcar como tejidos</button><button id="tq">Quitar tejido</button></div>
+<h2>Padrino sin solicitud</h2><p class="m">Para alguien que pagó en persona. Ejemplo de hexágonos: 90, 91, 100-105</p>
+<label>Hexágonos<input id="mh"></label><label>Nombre del padrino<input id="mn"></label><button class="ok" id="mg">Apadrinar</button>
+</section></main><div id="msg" role="status"></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script src="../js/config.js"></script>
+<script>
+var $=function(i){return document.getElementById(i)},tab='pendiente',timer,last=-1,
+db=(SUPABASE_URL&&window.supabase)?supabase.createClient(SUPABASE_URL,SUPABASE_KEY):null;
+function say(t){var m=$('msg');m.textContent=t;m.style.display='block';clearTimeout(say.t);say.t=setTimeout(function(){m.style.display='none'},4000)}
+function show(ok){$('login').hidden=ok;$('app').hidden=!ok;$('out').hidden=!ok;$('bell').hidden=!ok}
+function nums(t){var o=[];t.split(',').forEach(function(p){var m=p.trim().match(/^(\d+)\s*-\s*(\d+)$/);if(m){for(var n=+m[1];n<=+m[2];n++)o.push(n)}else if(/^\d+$/.test(p.trim()))o.push(+p.trim())});return o}
+function run(fn,args,ok){db.rpc(fn,args).then(function(r){if(r.error)say('Error: '+r.error.message);else{say(ok);load()}})}
+if(!db){$('login').innerHTML='<h2>Falta configurar</h2><p>Pega los datos de Supabase en js/config.js.</p>'}
+else db.auth.getSession().then(function(r){if(r.data.session)enter()});
+$('in').onclick=function(){db.auth.signInWithPassword({email:$('em').value.trim(),password:$('pw').value}).then(function(r){if(r.error)$('err').textContent='Correo o contraseña incorrectos.';else enter()})};
+function enter(){show(true);load();clearInterval(timer);timer=setInterval(load,20000)}
+$('out').onclick=function(){db.auth.signOut();clearInterval(timer);show(false)};
+$('bell').onclick=function(){Notification.requestPermission().then(function(p){say(p=='granted'?'Avisos activados mientras esta pestaña esté abierta':'Avisos bloqueados')})};
+['pendiente','pagada','cancelada'].forEach(function(t){var b=document.createElement('button');b.textContent=t=='pendiente'?'Pendientes':t=='pagada'?'Pagadas':'Canceladas';b.dataset.t=t;b.onclick=function(){tab=t;load()};$('tabs').appendChild(b)});
+function load(){db.from('solicitudes').select('*').order('id',{ascending:false}).limit(100).then(function(r){
+ if(r.error){$('list').textContent='Sin permiso o error: '+r.error.message;return}
+ var pend=r.data.filter(function(x){return x.estado=='pendiente'}).length;$('cnt').textContent=pend?'('+pend+' pendientes)':'';document.title=(pend?'('+pend+') ':'')+'Panel · Amarte';
+ if(last>=0&&pend>last&&window.Notification&&Notification.permission=='granted')new Notification('Nueva solicitud de apadrinamiento');last=pend;
+ document.querySelectorAll('#tabs button').forEach(function(b){b.className=b.dataset.t==tab?'on':''});
+ var l=$('list');l.innerHTML='';var rows=r.data.filter(function(x){return x.estado==tab});
+ if(!rows.length)l.textContent='No hay solicitudes en esta lista.';
+ rows.forEach(function(s){var c=document.createElement('div');c.className='card';
+  var n=document.createElement('b');n.className='n';n.textContent='#'+s.id+' · '+s.nombre;c.appendChild(n);
+  var m=document.createElement('div');m.className='m';m.textContent=new Date(s.creado_en).toLocaleString('es-CO')+' · '+(s.mostrar?'Nombre público':'Anónimo');c.appendChild(m);
+  var h=document.createElement('div');h.textContent='Hexágonos '+s.hexagonos.map(function(x){return '#'+x}).join(', ')+' · $'+(s.hexagonos.length*8000).toLocaleString('es-CO');c.appendChild(h);
+  var k=document.createElement('div');var d=s.contacto.replace(/\D/g,'');
+  if(/^[\d\s+()-]{7,}$/.test(s.contacto)){var a=document.createElement('a');a.href='https://wa.me/'+(d.length==10?'57'+d:d);a.target='_blank';a.textContent='Escribir a '+s.contacto;k.appendChild(a)}else k.textContent=s.contacto;c.appendChild(k);
+  if(s.estado=='pendiente'){var z=document.createElement('div');z.className='a';
+   var y=document.createElement('button');y.className='ok';y.textContent='Ya pagó';y.onclick=function(){run('aprobar_solicitud',{p_id:s.id},'Apadrinado: ya aparece en la página')};
+   var q=document.createElement('button');q.className='no';q.textContent='No pagó (liberar)';q.onclick=function(){run('cancelar_solicitud',{p_id:s.id},'Hexágonos liberados')};
+   z.appendChild(y);z.appendChild(q);c.appendChild(z)}
+  l.appendChild(c)})})}
+function tj(v){var a=+$('td').value,b=+$('th').value;if(!a||!b||b<a){say('Escribe un rango válido');return}run('marcar_tejidos',{p_desde:a,p_hasta:b,p_tejido:v},v?'Marcados como tejidos':'Tejido quitado')}
+$('tj').onclick=function(){tj(true)};$('tq').onclick=function(){tj(false)};
+$('mg').onclick=function(){var h=nums($('mh').value),n=$('mn').value.trim();if(!h.length||!n){say('Escribe hexágonos y nombre');return}run('apadrinar_manual',{p_hex:h,p_nombre:n},'Apadrinado');$('mh').value=$('mn').value=''};
+</script></body></html>

@@ -107,7 +107,7 @@
 <div>Apadrina el Cielo Tejido</div>
 <h3>Tu apadrinamiento</h3>
 <p style="word-break:break-word">Hexágonos: <b id="dL"></b><br>Total: <b id="dT"></b></p>
-<p>Se abre WhatsApp con tu solicitud. La fundación te enviará los datos de pago, y el hexágono se marca como apadrinado cuando confirme tu comprobante. Si no pagas, queda libre.</p>
+<p>Tus hexágonos quedan reservados 48 horas y se abre WhatsApp con tu solicitud. La fundación te enviará los datos de pago; cuando confirme tu comprobante quedan apadrinados con tu nombre. Si no pagas, se liberan solos.</p>
 <label for="nm">Tu nombre</label><input id="nm" autocomplete="name" placeholder="Nombre y apellido">
 <label for="ct">Tu WhatsApp o correo</label><input id="ct" placeholder="Para coordinar tu aporte">
 <label style="display:flex;gap:10px;align-items:center;font-weight:600"><input id="mostrar" type="checkbox" checked style="width:22px;height:22px"> Mi nombre puede aparecer en el cielo</label>
@@ -116,10 +116,13 @@
 <div id="sb" hidden><div><b id="sbN"></b> · <span id="sbT"></span></div><button class="btn y" id="sbGo">Apadrinar</button><button class="btn" id="sbClr">Limpiar</button></div>
 <div id="tip"></div><div id="toast" role="status"></div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script src="js/config.js"></script>
 <script src="js/data.js"></script>
 <script src="js/hexgrid.js"></script>
 <script src="js/plan.js"></script>
 <script src="js/effects.js"></script>
 <script src="js/main.js"></script>
+<script src="js/api.js"></script>
 </body>
 </html>

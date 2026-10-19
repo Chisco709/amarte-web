@@ -12,7 +12,7 @@ function stats() {
 function bar() { var n = picked().length; $('sb').hidden = !n; $('sbN').textContent = n + (n == 1 ? ' hexágono' : ' hexágonos'); $('sbT').textContent = fmt(n * PRECIO); }
 function muro() {
   var m = {}, box = $('muro'); box.innerHTML = '';
-  APADRINADOS.forEach(function (e) { var k = e.nombre; m[k] = (m[k] || []).concat(expand(e.hex)); });
+  who.forEach(function (n, i) { if (n && st[i] == 2) (m[n] = m[n] || []).push(i + 1); });
   var names = Object.keys(m);
   if (!names.length) { var p = document.createElement('p'); p.textContent = 'Aquí aparecerán los nombres de los padrinos. Sé el primero.'; box.appendChild(p); return; }
   names.forEach(function (k) {
@@ -54,15 +54,29 @@ $('sbClr').onclick = function () { sel = {}; g.querySelectorAll('.hx.sel').forEa
 $('sbGo').onclick = function () { var p = picked(); $('dL').textContent = p.map(function (i) { return '#' + (i + 1); }).join(', '); $('dT').textContent = fmt(p.length * PRECIO); $('dlg').showModal(); };
 $('no').onclick = function () { $('dlg').close(); };
 $('ok').onclick = function () {
-  var nm = $('nm').value.trim(), ct = $('ct').value.trim(), p = picked();
+  var nm = $('nm').value.trim(), ct = $('ct').value.trim(), p = picked(), mostrar = $('mostrar').checked, btn = $('ok');
   if (!nm || !ct) { toast('Escribe tu nombre y un medio de contacto'); return; }
   if (!p.length) { $('dlg').close(); return; }
-  var msg = 'Hola Fundación Amarte, quiero apadrinar el Cielo Tejido.\nHexágonos: ' + p.map(function (i) { return '#' + (i + 1); }).join(', ') +
-    '\nTotal: ' + fmt(p.length * PRECIO) + '\nNombre: ' + nm + '\nContacto: ' + ct + '\nMostrar nombre: ' + ($('mostrar').checked ? 'Sí' : 'No') +
-    '\nQuedo atento a los datos de pago y enviaré el comprobante.';
-  var url = 'https://wa.me/' + WHATSAPP + '?text=' + encodeURIComponent(msg);
-  if (!window.open(url, '_blank', 'noopener')) location.href = url;
-  $('dlg').close(); $('sbClr').onclick(); $('nm').value = $('ct').value = '';
-  toast('Se abrió WhatsApp. Tu hexágono queda apadrinado cuando se confirme el pago.');
+  var lista = p.map(function (i) { return '#' + (i + 1); }).join(', ');
+  function abrir(id, w) {
+    var m = 'Hola Fundación Amarte, quiero apadrinar el Cielo Tejido.' + (id ? '\nSolicitud #' + id : '') + '\nHexágonos: ' + lista +
+      '\nTotal: ' + fmt(p.length * PRECIO) + '\nNombre: ' + nm + '\nContacto: ' + ct + '\nMostrar nombre: ' + (mostrar ? 'Sí' : 'No') +
+      '\nQuedo atento a los datos de pago y enviaré el comprobante.';
+    var url = 'https://wa.me/' + WHATSAPP + '?text=' + encodeURIComponent(m);
+    if (w) w.location = url; else if (!window.open(url, '_blank', 'noopener')) location.href = url;
+  }
+  function fin() { $('dlg').close(); $('sbClr').onclick(); $('nm').value = $('ct').value = ''; }
+  if (!db) { abrir(0, null); fin(); toast('Se abrió WhatsApp. Tu hexágono queda apadrinado cuando se confirme el pago.'); return; }
+  var w = window.open('about:blank', '_blank'); btn.disabled = true;
+  db.rpc('crear_solicitud', { p_hex: p.map(function (i) { return i + 1; }), p_nombre: nm, p_contacto: ct, p_mostrar: mostrar }).then(function (r) {
+    btn.disabled = false;
+    if (r.error || !r.data || !r.data.ok) {
+      if (w) w.close();
+      toast(r.data && r.data.ocupados ? 'Ya no están disponibles: ' + r.data.ocupados.map(function (n) { return '#' + n; }).join(', ') : 'No pudimos reservar. Intenta de nuevo.');
+      refrescar(); return;
+    }
+    abrir(r.data.id, w); fin(); refrescar();
+    toast('¡Reservado por 48 horas! Envía el mensaje de WhatsApp y paga para confirmar.');
+  });
 };
 muro();
