@@ -1,0 +1,11 @@
+/* nav */
+nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:var(--g2);color:#fff;border-bottom:3px solid #fff}
+nav .wrap{display:flex;align-items:center;gap:22px;height:64px}
+nav img{width:44px;height:44px;border-radius:50%;background:#fff}
+nav .d{font-size:24px;margin-right:auto;transform:skewX(-8deg)}
+nav a{color:#fff;text-decoration:none;font-weight:600;font-size:15px}
+nav a:hover{text-decoration:underline;text-underline-offset:5px}
+@media(max-width:800px){nav a.l{display:none}}
+.btn{display:inline-block;background:#fff;color:var(--g2);border:3px solid var(--g2);font:800 17px 'Bricolage Grotesque',sans-serif;padding:13px 24px;cursor:pointer;text-decoration:none;box-shadow:6px 6px 0 var(--g2);transition:transform .12s,box-shadow .12s}
+.btn:hover{transform:translate(4px,4px);box-shadow:2px 2px 0 var(--g2)}
+.btn.y{background:#f0b232}

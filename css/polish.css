@@ -1,0 +1,15 @@
+/* polish: textura, hilo de progreso, pasos, animación de tejido */
+body{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.8' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .08 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+#prog{position:fixed;top:env(safe-area-inset-top,0px);left:0;right:0;height:6px;z-index:80;transform-origin:left;transform:scaleX(0);background:linear-gradient(90deg,#d1366f,#f0b232,#3da697,#4b9be8,#876cdc,#f0864f)}
+.hero .sticker{transition:rotate .4s cubic-bezier(.3,1.6,.5,1)}.hero .sticker:hover{rotate:-5deg}
+.hero .hx2{animation:float 7s ease-in-out infinite}
+@keyframes float{50%{translate:0 -14px;rotate:3deg}}
+.how{list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;padding:0;margin:30px 0 0;counter-reset:h}
+.how li{counter-increment:h;border:3px solid #fff;padding:14px 18px 14px 58px;font-size:16px;position:relative}
+.how li::before{content:counter(h);position:absolute;left:14px;top:50%;translate:0 -50%;font:400 40px/1 Anton,sans-serif;color:#f0b232}
+.how li:nth-child(odd){rotate:-.8deg}.how li:nth-child(even){rotate:.8deg}
+#grid:not(.on) .hx.t,#grid:not(.on) .hx.p{opacity:0}
+#grid.on .hx.t,#grid.on .hx.p{animation:pop .55s var(--d,0s) backwards}
+@keyframes pop{from{scale:.1;opacity:0;rotate:60deg}}
+input[type=number]{max-width:110px}
+.hx.f:focus-visible{outline:none}

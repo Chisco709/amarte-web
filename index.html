@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Fundación Amarte · Proyecto San Judas</title>
+<meta name="description" content="Apadrina un hexágono del Cielo Tejido y apoya el Proyecto San Judas de la Fundación Amarte en Dosquebradas, Risaralda.">
+<meta name="theme-color" content="#0a2e0e">
+<meta property="og:title" content="Fundación Amarte · Proyecto San Judas">
+<meta property="og:description" content="880 hexágonos tejidos por el barrio sobre la cuadra. Apadrina uno.">
+<link rel="icon" href="assets/logo.png">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Bricolage+Grotesque:wght@400;600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/nav.css">
+<link rel="stylesheet" href="css/hero.css">
+<link rel="stylesheet" href="css/about.css">
+<link rel="stylesheet" href="css/cielo.css">
+<link rel="stylesheet" href="css/plan.css">
+<link rel="stylesheet" href="css/sections.css">
+<link rel="stylesheet" href="css/footer.css">
+<link rel="stylesheet" href="css/polish.css">
+</head>
+<body>
+<div id="prog" aria-hidden="true"></div>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="rough"><feTurbulence baseFrequency=".035 .09" numOctaves="3" seed="4" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="7"/></filter></svg>
+
+<nav><div class="wrap">
+<img src="assets/logo.png" alt="Logo Fundación Amarte"><span class="d">Amarte</span>
+<a class="l" href="#nosotros">Quiénes somos</a><a class="l" href="#cielo">Cielo Tejido</a><a class="l" href="#plan">El plan</a><a class="l" href="#ayuda">Cómo ayudar</a>
+<a class="btn y" href="#cielo" style="padding:8px 16px;font-size:15px;box-shadow:4px 4px 0 #fff">Apadrina</a>
+</div></nav>
+
+<header class="hero"><div class="wrap">
+<h1 class="rough"><span>Amar,</span><span><i class="b" style="font-style:normal">servir,</i></span><span>transformar.</span></h1>
+<p>Proyecto San Judas: el plan de crecimiento de la Fundación Amarte en Dosquebradas, Risaralda. Una casa, un café, un comedor comunitario y un cielo tejido sobre toda la cuadra.</p>
+<a class="btn y" href="#cielo">Apadrina un hexágono</a> <a class="btn" href="#plan">Ver el proyecto</a>
+</div>
+<img class="sticker" src="assets/logo.png" alt="Sello de la Fundación Amarte">
+<svg class="hx2" viewBox="0 0 200 180" aria-hidden="true"><g stroke="#0a2e0e" stroke-width="3"><path fill="#d1366f" d="M60 10l30 17v35L60 79 30 62V27z"/><path fill="#f0b232" d="M120 10l30 17v35l-30 17-30-17V27z"/><path fill="#3da697" d="M30 62l30 17v35l-30 17-30-17V79z"/><path fill="#4b9be8" d="M90 62l30 17v35l-30 17-30-17V79z"/><path fill="#876cdc" d="M150 62l30 17v35l-30 17-30-17V79z"/><path fill="#f0864f" d="M60 114l30 17v35l-30 17-30-17v-35z"/></g></svg>
+</header>
+<div class="mq" aria-hidden="true"><div class="d" id="mq"></div></div>
+
+<section id="nosotros"><div class="wrap">
+<h2>8 años de labor social</h2>
+<p style="margin-top:26px;font-size:21px">Prevenimos el consumo de drogas en niños, acompañamos a quienes quieren salir y tejemos comunidad con principios bíblicos. Llevamos 8 meses en el barrio San Judas.</p>
+<div class="rows">
+<div class="row" tabindex="0"><h3>Niños</h3><p>Manualidades y enseñanza bíblica en un espacio seguro.</p></div>
+<div class="row" tabindex="0"><h3>Personas mayores</h3><p>Talleres de tejido y crochet que dan vida al Cielo Tejido.</p></div>
+<div class="row" tabindex="0"><h3>El barrio</h3><p>Vecinos que se conocen y se cuidan alrededor de una casa.</p></div>
+</div></div></section>
+
+<section id="cielo" class="sky"><div class="wrap">
+<h2>Cielo Tejido</h2>
+<p style="margin-top:22px;font-size:21px">880 hexágonos de crochet, tejidos por el barrio, cubrirán el cielo de la calle y atraerán visitantes a la casa y al café. Cada uno vale $8.000. Toca un hexágono vacío y apadrínalo.</p>
+<ol class="how"><li><b>Elige</b> un hexágono vacío del cielo.</li><li><b>Apadrínalo</b> con $8.000.</li><li><b>Lo teje</b> una persona del barrio.</li></ol>
+<div class="stats">
+<div><b id="nT">0</b>tejidos</div><div><b id="nP">0</b>apadrinados</div><div><b id="nF">0</b>por apadrinar</div><div><b id="nM">$0</b>por reunir</div>
+</div>
+<div class="bar" aria-hidden="true"><i id="bP" style="background:#fff"></i><i id="bT" style="background:#f0b232"></i></div>
+<div class="chips" role="group" aria-label="Filtrar hexágonos">
+<button class="chip" data-f="all" aria-pressed="true">Todos</button>
+<button class="chip" data-f="t" aria-pressed="false"><span class="dot"></span>Tejidos</button>
+<button class="chip" data-f="p" aria-pressed="false"><span class="dot w"></span>Apadrinados</button>
+<button class="chip" data-f="f" aria-pressed="false"><span class="dot o"></span>Faltan</button>
+</div>
+<div id="grid"></div>
+</div></section>
+
+<section id="plan"><div class="wrap">
+<h2>Plan en tres fases</h2>
+<p style="margin-top:22px">Cada fase dura de 0 a 3 meses. Cifras aproximadas en millones de pesos (COP), por confirmar con cotizaciones.</p>
+<div class="ph" role="tablist" id="ph"></div>
+<div class="tk" id="tk"></div>
+<div class="tot">
+<div><b>38 a 79 M</b>inversión total estimada en las tres fases</div>
+<div><b>+10 %</b>de imprevistos</div>
+<div><b>3 a 5 M</b>al mes de operación, sin arriendo ni nómina</div>
+</div></div></section>
+
+<section id="ayuda" class="fin"><div class="wrap">
+<h2>Cómo se financia</h2>
+<ul>
+<li><h3>Apadrina un hexágono</h3><p>880 hexágonos a $8.000 suman $7,04 M y cubren casi todo el Cielo Tejido.</p></li>
+<li><h3>Empresas e iglesias</h3><p>Aliados con responsabilidad social. Certificados de donación con régimen especial vigente.</p></li>
+<li><h3>Convocatorias</h3><p>Alcaldía de Dosquebradas, Gobernación de Risaralda, cooperación y fundaciones.</p></li>
+<li><h3>Café y tejidos</h3><p>Las ventas sostienen el comedor comunitario.</p></li>
+</ul></div></section>
+
+<section><div class="wrap">
+<h2>Próximos pasos</h2>
+<div class="nx">
+<div><b>1</b>Navidad Alegre: lista de niños y presupuesto de regalos.</div>
+<div><b>2</b>Lanzar Apadrina un hexágono, con meta de 400 hexágonos por mes.</div>
+<div><b>3</b>Permisos: Junta de Acción Comunal, concepto estructural y sanitario.</div>
+</div></div></section>
+
+<footer><div class="wrap">
+<span class="d" style="font-size:28px">Amar, servir, transformar.</span><br>Fundación Amarte · Barrio San Judas, Dosquebradas, Risaralda
+<div class="big" aria-hidden="true">Amarte</div>
+</div></footer>
+
+<dialog id="dlg">
+<div>Apadrina este hexágono</div>
+<h3>Hexágono <span id="dN"></span></h3>
+<p>Tu aporte: <b id="dT">$8.000</b>. Cada hexágono paga la lana y el hilo de una pieza que tejerá una persona del barrio y colgará sobre la calle.</p>
+<label for="qty">¿Cuántos hexágonos? (máx. 20)</label><input id="qty" type="number" min="1" max="20" value="1">
+<label for="nm">Tu nombre</label><input id="nm" autocomplete="name" placeholder="Nombre y apellido">
+<label for="ct">WhatsApp o correo</label><input id="ct" placeholder="Para coordinar tu aporte">
+<div class="acts"><button class="btn y" id="ok">Apadrinar</button><button class="btn" id="no">Cancelar</button></div>
+</dialog>
+<div id="tip"></div><div id="toast" role="status"></div>
+
+<script src="js/data.js"></script>
+<script src="js/hexgrid.js"></script>
+<script src="js/plan.js"></script>
+<script src="js/effects.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

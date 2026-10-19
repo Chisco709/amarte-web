@@ -1,0 +1,4 @@
+/* tokens */
+:root{--g:#14501a;--g2:#0a2e0e;--paper:#f6f4ee;--ink:#0a2e0e;--w:#fff;--mut:#46604b;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--paper:#0c1a0f;--ink:#f1f5ee;--mut:#9db5a2;color-scheme:dark}}
+:root[data-theme="dark"]{--paper:#0c1a0f;--ink:#f1f5ee;--mut:#9db5a2;color-scheme:dark}

@@ -1,0 +1,27 @@
+/* cielo */
+.sky{background:var(--g2);color:#fff;clip-path:polygon(0 4vw,100% 0,100% calc(100% - 4vw),0 100%);padding:calc(96px + 4vw) 0}
+.stats{display:flex;flex-wrap:wrap;gap:12px 40px;margin:34px 0 20px}
+.stats div{font-size:15px}
+.stats b{display:block;font:400 clamp(54px,8vw,92px)/1 Anton,sans-serif;transform:skewX(-8deg)}
+.bar{height:18px;background:rgba(255,255,255,.15);display:flex;border:2px solid #fff}
+.bar i{display:block;transition:width .6s}
+.chips{display:flex;gap:10px;flex-wrap:wrap;margin:22px 0 10px}
+.chip{border:2px solid #fff;background:transparent;color:#fff;font:700 15px 'Bricolage Grotesque',sans-serif;padding:8px 16px;cursor:pointer;display:flex;gap:8px;align-items:center}
+.chip[aria-pressed="true"]{background:#fff;color:var(--g2)}
+.dot{width:14px;height:14px;clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);background:#d1366f}
+.dot.w{background:#fff;outline:0}.dot.o{background:#4c7a50}
+#grid{position:relative;width:100%;margin-top:14px}
+.hx{position:absolute;border:0;padding:0;clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);transition:transform .15s,opacity .2s}
+.hx::after{content:"";position:absolute;inset:2px;clip-path:inherit}
+.hx.f{background:#6a9b6e;cursor:pointer}.hx.f::after{background:var(--g2)}
+.hx.f:hover,.hx.f:focus-visible{transform:scale(1.5);z-index:3;background:#fff}
+.hx.f:hover::after{background:#fff}
+.hx.p{background:#fff}.hx.p::after{background:#fff}
+.hx.dim{opacity:.1}
+#tip{position:fixed;z-index:60;background:#fff;color:var(--g2);font:800 13px 'Bricolage Grotesque',sans-serif;padding:6px 10px;pointer-events:none;display:none;border:2px solid var(--g2)}
+dialog{border:4px solid var(--g2);border-radius:0;padding:30px;max-width:440px;width:calc(100% - 32px);background:var(--paper);color:var(--ink);box-shadow:12px 12px 0 var(--g2)}
+dialog::backdrop{background:rgba(5,25,10,.7)}
+dialog h3{font-size:64px;color:var(--g);transform:skewX(-8deg);transform-origin:left;margin:6px 0 12px}
+label{display:block;font-weight:800;font-size:14px;margin:14px 0 4px}
+input{width:100%;font:inherit;padding:11px 14px;border:3px solid var(--ink);border-radius:0;background:#fff;color:#0a2e0e}
+.acts{display:flex;gap:12px;margin-top:22px;flex-wrap:wrap}

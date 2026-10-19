@@ -1,0 +1,9 @@
+/* about */
+section{padding:96px 0}
+.rows{margin-top:40px;border-top:4px solid var(--ink)}
+.row{border-bottom:4px solid var(--ink);padding:20px 0;cursor:pointer}
+.row h3{font-size:clamp(48px,9vw,120px);transform:skewX(-8deg);transform-origin:left;transition:letter-spacing .25s,color .25s}
+.row:hover h3,.row:focus-within h3{letter-spacing:.06em;color:var(--g)}
+.row p{max-height:0;overflow:hidden;opacity:0;margin:0;transition:max-height .35s,opacity .35s,margin .35s;font-size:20px}
+.row:hover p,.row:focus-within p{max-height:120px;opacity:1;margin-top:10px}
+@media(hover:none){.row p{max-height:none;opacity:1;margin-top:10px}}
