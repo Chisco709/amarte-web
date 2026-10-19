@@ -1,7 +1,7 @@
 -- ============ FUNDACIÓN AMARTE · base de datos (pegar completo en Supabase > SQL Editor > Run) ============
 -- 1) CAMBIA ESTE CORREO por el tuyo (el mismo con el que entrarás al panel /admin/)
 create table if not exists admins(email text primary key);
-insert into admins values ('juanjosechisco008@gmail.com') on conflict do nothing;
+insert into admins values ('juanjosechiscomontoya008@gmail.com') on conflict do nothing;
 
 create table if not exists hexagonos(
   numero int primary key check (numero between 1 and 880),
