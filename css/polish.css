@@ -29,3 +29,9 @@ input[type=number]{max-width:110px}
 .pd b{font-size:19px}.pd span{font-size:14px;color:#b7cdb9}
 
 .hx span{font-family:'Bricolage Grotesque',system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;font-size:13px;max-width:96%;overflow:hidden}
+
+.skip{position:absolute;left:-999px;top:0;z-index:100;background:#fff;color:#0a2e0e;padding:10px 16px;font-weight:800}.skip:focus{left:12px;top:12px}
+.faq{background:var(--paper)}.faq details{border-bottom:4px solid var(--ink);padding:20px 0}
+.faq summary{font:400 clamp(26px,4vw,42px)/1.05 Anton,sans-serif;text-transform:uppercase;cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:16px;transform:skewX(-6deg);transform-origin:left}
+.faq summary::-webkit-details-marker{display:none}.faq summary::after{content:"+";color:var(--g)}.faq details[open] summary::after{content:"−"}
+.faq details p{margin:14px 0 0;font-size:19px;max-width:70ch}

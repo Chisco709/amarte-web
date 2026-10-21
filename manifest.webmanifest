@@ -1,0 +1,24 @@
+{
+  "name": "Fundación Amarte",
+  "short_name": "Amarte",
+  "description": "Fundación Amarte trabaja con niños, adultos mayores y vecinos del barrio San Judas en Dosquebradas. Apadrina un hexágono del Cielo Tejido por $8.000.",
+  "lang": "es-CO",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#14501a",
+  "theme_color": "#0a2e0e",
+  "icons": [
+    {
+      "src": "assets/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
