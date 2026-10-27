@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es-CO"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>¡Gracias! · Fundación Amarte</title><meta name="robots" content="noindex,nofollow">
+<link rel="icon" href="../favicon.ico" sizes="any"><link href="https://fonts.googleapis.com/css2?family=Anton&family=Bricolage+Grotesque:wght@400;800&display=swap" rel="stylesheet"><style>*{box-sizing:border-box}body{margin:0;background:#14501a;color:#fff;font:18px/1.6 'Bricolage Grotesque',system-ui,sans-serif}
+a{color:inherit}main{max-width:760px;margin:0 auto;padding:40px 22px 80px}
+h1{font:400 clamp(80px,20vw,200px)/.9 Anton,Impact,sans-serif;text-transform:uppercase;transform:skewX(-8deg);transform-origin:left;margin:20px 0 10px}
+h2{font:400 36px/1 Anton,sans-serif;text-transform:uppercase;margin:36px 0 12px}
+.btn{display:inline-block;background:#fff;color:#0a2e0e;border:3px solid #0a2e0e;font-weight:800;padding:13px 24px;text-decoration:none;box-shadow:6px 6px 0 #0a2e0e;margin:6px 10px 6px 0}.btn.y{background:#f0b232}
+.logo{width:56px;height:56px;border-radius:50%;background:#fff;vertical-align:middle;margin-right:12px}
+ol{padding-left:22px}li{margin:8px 0}</style>
+<script defer src="../js/config.js"></script><script defer src="../js/analytics.js"></script><script defer src="../js/data.js"></script></head>
+<body><main>
+<a href="../" style="text-decoration:none;font-weight:800"><img class="logo" src="../assets/logo-96.png" width="56" height="56" alt="Fundación Amarte">Fundación Amarte</a>
+<h1>¡Gracias!</h1>
+<p id="res" style="font-size:22px">Recibimos tu solicitud de apadrinamiento.</p>
+<h2>Qué sigue</h2>
+<ol><li>Envía el mensaje de <b>WhatsApp</b> que preparamos para ti (si no se abrió, usa el botón de abajo).</li>
+<li>Te respondemos con los datos de pago.</li>
+<li>Envía tu comprobante y tu hexágono queda apadrinado con tu nombre en el Cielo Tejido.</li></ol>
+<p style="color:#cfe0cf">Tus hexágonos quedan reservados 48 horas. Si no se completa el pago, se liberan solos.</p>
+<p><a class="btn y" id="wa" href="#" target="_blank" rel="noopener">Abrir WhatsApp</a><a class="btn" href="../#cielo">Volver al Cielo Tejido</a><a class="btn" id="sh" href="#">Compartir</a></p>
+<script>
+document.addEventListener('DOMContentLoaded',function(){
+var q=new URLSearchParams(location.search),s=q.get('s')||'0',n=+q.get('n')||0,v=+q.get('v')||0,u=null,$=function(i){return document.getElementById(i)};
+try{u=sessionStorage.getItem('amarte_wa')}catch(e){}
+$('wa').href=u||('https://wa.me/'+(window.WHATSAPP||'573148885007'));
+$('wa').addEventListener('click',function(){window.track&&track('click_whatsapp',{value:v,currency:'COP'})});
+if(n){$('res').textContent='Recibimos tu solicitud'+(s!='0'?' #'+s:'')+': '+n+(n==1?' hexágono':' hexágonos')+' por $'+v.toLocaleString('es-CO')+'.'}
+var key='amarte_conv_'+s,done=false;try{done=n&&s!='0'&&localStorage.getItem(key)}catch(e){}
+if(n&&!done){
+ window.track&&track('generate_lead',{currency:'COP',value:v,transaction_id:'s'+s});
+ if(window.ADS_ID&&window.ADS_LABEL&&window.gtag)gtag('event','conversion',{send_to:window.ADS_ID+'/'+window.ADS_LABEL,value:v,currency:'COP',transaction_id:'s'+s});
+ try{localStorage.setItem(key,'1')}catch(e){}
+}
+var site=location.origin+location.pathname.replace(/gracias\/?$/,'');
+$('sh').onclick=function(e){e.preventDefault();var t='Apadrina un hexágono del Cielo Tejido de la Fundación Amarte en Dosquebradas.';
+ if(navigator.share)navigator.share({title:'Fundación Amarte',text:t,url:site}).catch(function(){});else window.open('https://wa.me/?text='+encodeURIComponent(t+' '+site),'_blank')};
+});
+</script></main></body></html>

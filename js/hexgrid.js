@@ -45,6 +45,7 @@ g.addEventListener('click', function (e) {
   var b = e.target.closest('.hx'); if (!b) return; var i = +b.dataset.i;
   if (st[i]) { toast(info(i)); return; }
   if (sel[i]) delete sel[i]; else sel[i] = 1;
+  if (sel[i] && window.track) track('add_to_cart', { currency: 'COP', value: PRECIO, items: [{ item_id: 'hex-' + (i + 1), item_name: 'Hexágono ' + (i + 1), item_category: 'Cielo Tejido', price: PRECIO, quantity: 1 }] });
   b.classList.toggle('sel', !!sel[i]); b.setAttribute('aria-pressed', !!sel[i]); bar();
 });
 g.addEventListener('mouseover', function (e) {
@@ -56,32 +57,33 @@ g.addEventListener('mouseleave', function () { tip.style.display = 'none'; });
 document.querySelectorAll('.chip').forEach(function (c) { c.onclick = function () { filt = c.dataset.f; document.querySelectorAll('.chip').forEach(function (x) { x.setAttribute('aria-pressed', x == c); }); apply(); }; });
 function toast(m) { var t = $('toast'); t.textContent = m; t.classList.add('on'); clearTimeout(toast.t); toast.t = setTimeout(function () { t.classList.remove('on'); }, 4500); }
 $('sbClr').onclick = function () { sel = {}; g.querySelectorAll('.hx.sel').forEach(function (b) { b.classList.remove('sel'); b.setAttribute('aria-pressed', 'false'); }); bar(); };
-$('sbGo').onclick = function () { var p = picked(); $('dL').textContent = p.map(function (i) { return '#' + (i + 1); }).join(', '); $('dT').textContent = fmt(p.length * PRECIO); $('dlg').showModal(); };
+$('sbGo').onclick = function () { var p = picked(); $('dL').textContent = p.map(function (i) { return '#' + (i + 1); }).join(', '); $('dT').textContent = fmt(p.length * PRECIO); $('dlg').showModal();
+  if (window.track) track('begin_checkout', { currency: 'COP', value: p.length * PRECIO, items: p.map(function (i) { return { item_id: 'hex-' + (i + 1), item_name: 'Hexágono ' + (i + 1), price: PRECIO, quantity: 1 }; }) }); };
 $('no').onclick = function () { $('dlg').close(); };
 $('ok').onclick = function () {
   var nm = $('nm').value.trim(), ct = $('ct').value.trim(), p = picked(), mostrar = $('mostrar').checked, btn = $('ok');
   if (!nm || !ct) { toast('Escribe tu nombre y un medio de contacto'); return; }
   if (!p.length) { $('dlg').close(); return; }
-  var lista = p.map(function (i) { return '#' + (i + 1); }).join(', ');
-  function abrir(id, w) {
+  if ($('web').value) { $('dlg').close(); return; }   // trampa para robots
+  var lista = p.map(function (i) { return '#' + (i + 1); }).join(', '), total = p.length * PRECIO;
+  function wa(id) {
     var m = 'Hola Fundación Amarte, quiero apadrinar el Cielo Tejido.' + (id ? '\nSolicitud #' + id : '') + '\nHexágonos: ' + lista +
-      '\nTotal: ' + fmt(p.length * PRECIO) + '\nNombre: ' + nm + '\nContacto: ' + ct + '\nMostrar nombre: ' + (mostrar ? 'Sí' : 'No') +
+      '\nTotal: ' + fmt(total) + '\nNombre: ' + nm + '\nContacto: ' + ct + '\nMostrar nombre: ' + (mostrar ? 'Sí' : 'No') +
       '\nQuedo atento a los datos de pago y enviaré el comprobante.';
-    var url = 'https://wa.me/' + WHATSAPP + '?text=' + encodeURIComponent(m);
-    if (w) w.location = url; else if (!window.open(url, '_blank', 'noopener')) location.href = url;
+    return 'https://wa.me/' + WHATSAPP + '?text=' + encodeURIComponent(m);
   }
-  function fin() { $('dlg').close(); $('sbClr').onclick(); $('nm').value = $('ct').value = ''; }
-  if (!db) { abrir(0, null); fin(); toast('Se abrió WhatsApp. Tu hexágono queda apadrinado cuando se confirme el pago.'); return; }
+  function gracias(id, u) { try { sessionStorage.setItem('amarte_wa', u); } catch (e) {} location.href = 'gracias/?s=' + (id || 0) + '&n=' + p.length + '&v=' + total; }
+  if (!db) { var u0 = wa(0); window.open(u0, '_blank'); setTimeout(function () { gracias(0, u0); }, 200); return; }
   var w = window.open('about:blank', '_blank'); btn.disabled = true;
-  db.rpc('crear_solicitud', { p_hex: p.map(function (i) { return i + 1; }), p_nombre: nm, p_contacto: ct, p_mostrar: mostrar }).then(function (r) {
+  db.rpc('crear_solicitud', { p_hex: p.map(function (i) { return i + 1; }), p_nombre: nm, p_contacto: ct, p_mostrar: mostrar, p_fuente: window.fuente ? fuente() : null }).then(function (r) {
     btn.disabled = false;
     if (r.error || !r.data || !r.data.ok) {
       if (w) w.close();
-      toast(r.data && r.data.ocupados ? 'Ya no están disponibles: ' + r.data.ocupados.map(function (n) { return '#' + n; }).join(', ') : 'No pudimos reservar. Intenta de nuevo.');
+      toast(r.data && r.data.ocupados ? 'Ya no están disponibles: ' + r.data.ocupados.map(function (n) { return '#' + n; }).join(', ') :
+        r.data && r.data.error == 'limite' ? 'Ya tienes solicitudes pendientes. Espera a que la fundación las confirme.' : 'No pudimos reservar. Intenta de nuevo.');
       refrescar(); return;
     }
-    abrir(r.data.id, w); fin(); refrescar();
-    toast('¡Reservado por 48 horas! Envía el mensaje de WhatsApp y paga para confirmar.');
+    var u = wa(r.data.id); if (w) w.location = u; setTimeout(function () { gracias(r.data.id, u); }, 250);
   });
 };
 muro();

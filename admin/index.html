@@ -16,6 +16,7 @@ button.ok{background:#f0b232}button.no{background:#fff}button.on{background:#145
 .card b.n{font:400 28px Anton,sans-serif;text-transform:uppercase}.card .m{color:#46604b;font-size:15px}
 .card .a{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
 a{color:#14501a;font-weight:800}
+.gal2{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:12px;margin-top:14px}.gal2 div{border:3px solid #0a2e0e;background:#fff;padding:6px;font-size:13px}.gal2 img{width:100%;aspect-ratio:1;object-fit:cover;display:block}.gal2 button{padding:5px 8px;font-size:13px;box-shadow:2px 2px 0 #0a2e0e;margin:6px 4px 0 0}
 #msg{position:fixed;left:50%;bottom:20px;translate:-50% 0;background:#f0b232;border:3px solid #0a2e0e;padding:10px 20px;font-weight:800;display:none;max-width:92vw}
 </style></head><body>
 <header><span class="d">Panel Amarte</span><button id="bell" hidden>Activar avisos</button><button id="out" hidden>Salir</button></header>
@@ -29,6 +30,12 @@ a{color:#14501a;font-weight:800}
 <div class="tabs"><button class="ok" id="tj">Marcar como tejidos</button><button id="tq">Quitar tejido</button></div>
 <h2>Padrino sin solicitud</h2><p class="m">Para alguien que pagó en persona. Ejemplo de hexágonos: 90, 91, 100-105</p>
 <label>Hexágonos<input id="mh"></label><label>Nombre del padrino<input id="mn"></label><button class="ok" id="mg">Apadrinar</button>
+<h2>Galería</h2>
+<p class="m">Las fotos se reducen automáticamente para que la página cargue rápido.</p>
+<label>Título (opcional, se aplica a las que subas ahora)<input id="cap"></label>
+<label>Imágenes<input id="files" type="file" accept="image/*" multiple></label>
+<div class="tabs"><button class="ok" id="up">Subir imágenes</button><span id="upst"></span></div>
+<div class="gal2" id="gal2"></div>
 </section></main><div id="msg" role="status"></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <script src="../js/config.js"></script>
@@ -42,7 +49,7 @@ function run(fn,args,ok){db.rpc(fn,args).then(function(r){if(r.error)say('Error:
 if(!db){$('login').innerHTML='<h2>Falta configurar</h2><p>Pega los datos de Supabase en js/config.js.</p>'}
 else db.auth.getSession().then(function(r){if(r.data.session)enter()});
 $('in').onclick=function(){db.auth.signInWithPassword({email:$('em').value.trim(),password:$('pw').value}).then(function(r){if(r.error)$('err').textContent='Correo o contraseña incorrectos.';else enter()})};
-function enter(){show(true);load();clearInterval(timer);timer=setInterval(load,20000)}
+function enter(){show(true);load();loadGal();clearInterval(timer);timer=setInterval(load,20000)}
 $('out').onclick=function(){db.auth.signOut();clearInterval(timer);show(false)};
 $('bell').onclick=function(){Notification.requestPermission().then(function(p){say(p=='granted'?'Avisos activados mientras esta pestaña esté abierta':'Avisos bloqueados')})};
 ['pendiente','pagada','cancelada'].forEach(function(t){var b=document.createElement('button');b.textContent=t=='pendiente'?'Pendientes':t=='pagada'?'Pagadas':'Canceladas';b.dataset.t=t;b.onclick=function(){tab=t;load()};$('tabs').appendChild(b)});
@@ -55,7 +62,7 @@ function load(){db.from('solicitudes').select('*').order('id',{ascending:false})
  if(!rows.length)l.textContent='No hay solicitudes en esta lista.';
  rows.forEach(function(s){var c=document.createElement('div');c.className='card';
   var n=document.createElement('b');n.className='n';n.textContent='#'+s.id+' · '+s.nombre;c.appendChild(n);
-  var m=document.createElement('div');m.className='m';m.textContent=new Date(s.creado_en).toLocaleString('es-CO')+' · '+(s.mostrar?'Nombre público':'Anónimo');c.appendChild(m);
+  var m=document.createElement('div');m.className='m';m.textContent=new Date(s.creado_en).toLocaleString('es-CO')+' · '+(s.mostrar?'Nombre público':'Anónimo')+(s.fuente?' · Origen: '+s.fuente:'');c.appendChild(m);
   var h=document.createElement('div');h.textContent='Hexágonos '+s.hexagonos.map(function(x){return '#'+x}).join(', ')+' · $'+(s.hexagonos.length*8000).toLocaleString('es-CO');c.appendChild(h);
   var k=document.createElement('div');var d=s.contacto.replace(/\D/g,'');
   if(/^[\d\s+()-]{7,}$/.test(s.contacto)){var a=document.createElement('a');a.href='https://wa.me/'+(d.length==10?'57'+d:d);a.target='_blank';a.textContent='Escribir a '+s.contacto;k.appendChild(a)}else k.textContent=s.contacto;c.appendChild(k);
@@ -67,4 +74,21 @@ function load(){db.from('solicitudes').select('*').order('id',{ascending:false})
 function tj(v){var a=+$('td').value,b=+$('th').value;if(!a||!b||b<a){say('Escribe un rango válido');return}run('marcar_tejidos',{p_desde:a,p_hasta:b,p_tejido:v},v?'Marcados como tejidos':'Tejido quitado')}
 $('tj').onclick=function(){tj(true)};$('tq').onclick=function(){tj(false)};
 $('mg').onclick=function(){var h=nums($('mh').value),n=$('mn').value.trim();if(!h.length||!n){say('Escribe hexágonos y nombre');return}run('apadrinar_manual',{p_hex:h,p_nombre:n},'Apadrinado');$('mh').value=$('mn').value=''};
+
+function shrink(f,max,q){return createImageBitmap(f).then(function(b){var k=Math.min(1,max/Math.max(b.width,b.height)),w=Math.round(b.width*k),h=Math.round(b.height*k),c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(b,0,0,w,h);return new Promise(function(ok){c.toBlob(function(bl){ok({blob:bl,w:w,h:h})},'image/jpeg',q)})})}
+$('up').onclick=async function(){var fs=Array.prototype.slice.call($('files').files),cap=$('cap').value.trim(),ok=0;
+ if(!fs.length){say('Elige una o más imágenes');return}
+ for(var i=0;i<fs.length;i++){$('upst').textContent='Subiendo '+(i+1)+' de '+fs.length+'…';
+  try{var A=await shrink(fs[i],1600,.82),T=await shrink(fs[i],640,.78),id=Date.now().toString(36)+Math.random().toString(36).slice(2,6),B=db.storage.from('galeria'),o={contentType:'image/jpeg',cacheControl:'31536000'};
+   var r1=await B.upload(id+'.jpg',A.blob,o);if(r1.error)throw r1.error;var r2=await B.upload(id+'-t.jpg',T.blob,o);if(r2.error)throw r2.error;
+   var r3=await db.from('galeria').insert({ruta:id+'.jpg',miniatura:id+'-t.jpg',titulo:cap||null,ancho:A.w,alto:A.h});if(r3.error)throw r3.error;ok++}
+  catch(e){say('Error con '+fs[i].name+': '+(e.message||e))}}
+ $('upst').textContent='';$('files').value='';say(ok+' imagen(es) subida(s)');loadGal()};
+function loadGal(){db.from('galeria').select('*').order('creado_en',{ascending:false}).then(function(r){var g=$('gal2');g.innerHTML='';if(r.error){g.textContent='Falta ejecutar migracion-2.sql: '+r.error.message;return}
+ if(!r.data.length)g.textContent='Aún no has subido imágenes.';
+ r.data.forEach(function(x){var d=document.createElement('div'),im=document.createElement('img'),t=document.createElement('div');
+  im.src=db.storage.from('galeria').getPublicUrl(x.miniatura).data.publicUrl;im.alt='';t.textContent=x.titulo||'(sin título)';d.appendChild(im);d.appendChild(t);
+  var e=document.createElement('button');e.textContent='Título';e.onclick=function(){var n=prompt('Título de la imagen',x.titulo||'');if(n===null)return;db.from('galeria').update({titulo:n.trim()||null}).eq('id',x.id).then(function(z){say(z.error?'Error: '+z.error.message:'Título guardado');loadGal()})};
+  var b=document.createElement('button');b.textContent='Borrar';b.onclick=function(){if(!confirm('¿Borrar esta imagen?'))return;db.storage.from('galeria').remove([x.ruta,x.miniatura]).then(function(){return db.from('galeria').delete().eq('id',x.id)}).then(function(){say('Imagen borrada');loadGal()})};
+  d.appendChild(e);d.appendChild(b);g.appendChild(d)})})}
 </script></body></html>

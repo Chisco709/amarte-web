@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://www.somosamarte.com/</loc>
-    <lastmod>2026-10-21</lastmod>
+    <loc>https://somosamarte.com/</loc>
+    <lastmod>2026-10-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
-    <xhtml:link rel="alternate" hreflang="es-CO" href="https://www.somosamarte.com/"/>
-    <image:image><image:loc>https://www.somosamarte.com/assets/og-image.png</image:loc><image:title>Cielo Tejido · Fundación Amarte</image:title></image:image>
+    <xhtml:link rel="alternate" hreflang="es-CO" href="https://somosamarte.com/"/>
+    <image:image><image:loc>https://somosamarte.com/assets/og-image.png</image:loc><image:title>Cielo Tejido · Fundación Amarte</image:title></image:image>
   </url>
 </urlset>
